@@ -1,15 +1,17 @@
 package lsfusion.gwt.client.form.object.table.grid.controller;
 
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.*;
 import lsfusion.gwt.client.ClientMessages;
 import lsfusion.gwt.client.GFormChanges;
 import lsfusion.gwt.client.base.GwtClientUtils;
 import lsfusion.gwt.client.base.Pair;
 import lsfusion.gwt.client.base.jsni.NativeHashMap;
+import lsfusion.gwt.client.base.view.PopupDialogPanel;
 import lsfusion.gwt.client.base.view.ResizableComplexPanel;
+import lsfusion.gwt.client.base.view.ResizableHorizontalPanel;
 import lsfusion.gwt.client.base.view.ResizableSimplePanel;
-import lsfusion.gwt.client.classes.data.GIntegralType;
 import lsfusion.gwt.client.form.GUpdateMode;
 import lsfusion.gwt.client.form.controller.GFormController;
 import lsfusion.gwt.client.form.design.GComponent;
@@ -22,15 +24,17 @@ import lsfusion.gwt.client.form.object.table.controller.GAbstractTableController
 import lsfusion.gwt.client.form.object.table.grid.user.design.GGridUserPreferences;
 import lsfusion.gwt.client.form.object.table.grid.user.design.GGroupObjectUserPreferences;
 import lsfusion.gwt.client.form.object.table.grid.user.design.view.GUserPreferencesDialog;
-import lsfusion.gwt.client.form.object.table.grid.user.toolbar.view.GCalculateSumButton;
-import lsfusion.gwt.client.form.object.table.grid.user.toolbar.view.GCountQuantityButton;
 import lsfusion.gwt.client.form.object.table.grid.user.toolbar.view.GToolbarButton;
 import lsfusion.gwt.client.form.object.table.grid.view.*;
 import lsfusion.gwt.client.form.object.table.view.GridPanel;
 import lsfusion.gwt.client.form.property.*;
 import lsfusion.gwt.client.form.view.Column;
+import lsfusion.gwt.client.view.StyleDefaults;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import static lsfusion.gwt.client.base.GwtClientUtils.setupFillParent;
 
@@ -208,8 +212,6 @@ public class GGridController extends GAbstractTableController {
     private GToolbarButton pivotTableButton;
     private GToolbarButton customViewButton;
     private GToolbarButton settingsButton;
-    private GCountQuantityButton quantityButton;
-    private GCalculateSumButton sumButton;
     private GToolbarButton manualUpdateTableButton;
     private GToolbarButton forceUpdateTableButton;
 
@@ -298,40 +300,6 @@ public class GGridController extends GAbstractTableController {
             addToolbarSeparator();
         }
 
-        if(groupObject.toolbar.showCountQuantity || groupObject.toolbar.showCalculateSum) {
-
-            if (groupObject.toolbar.showCountQuantity) {
-                quantityButton = new GCountQuantityButton() {
-                    @Override
-                    public ClickHandler getClickHandler() {
-                        return event -> formController.countRecords(groupObject);
-                    }
-                };
-                addToToolbar(quantityButton);
-            }
-
-            if (groupObject.toolbar.showCalculateSum) {
-                sumButton = new GCalculateSumButton() {
-                    @Override
-                    public ClickHandler getClickHandler() {
-                        return event -> {
-                            GPropertyDraw property = getSelectedProperty();
-                            if (property != null) {
-                                if (property.baseType instanceof GIntegralType) {
-                                    formController.calculateSum(groupObject, property, table.getCurrentColumnKey());
-                                } else {
-                                    showSum(null, property);
-                                }
-                            }
-                        };
-                    }
-                };
-                addToToolbar(sumButton);
-            }
-
-            addToolbarSeparator();
-        }
-
         if(groupObject.toolbar.showPrintGroupXls) {
             addToToolbar(new GToolbarButton("excelbw.png", messages.formGridExport()) {
                 @Override
@@ -368,14 +336,44 @@ public class GGridController extends GAbstractTableController {
         addToToolbar(forceUpdateTableButton);
     }
 
-    public void showRecordQuantity(int quantity) {
+    public void showRecordQuantity(int quantity, int x, int y) {
         assert isList();
-        quantityButton.showPopup(quantity);
+
+        PopupDialogPanel popup = new PopupDialogPanel();
+        popup.addStyleName("popup");
+        GwtClientUtils.showPopupInWindow(popup, new FocusPanel(new Label(messages.formQueriesNumberOfEntries() + ": " + NumberFormat.getDecimalFormat().format(quantity))), x, y);
     }
 
-    public void showSum(Number sum, GPropertyDraw property) {
+    public void showSum(Number sum, GPropertyDraw property, int x, int y) {
         assert isList();
-        sumButton.showPopup(sum, property);
+
+        PopupDialogPanel popup = new PopupDialogPanel();
+        popup.addStyleName("popup");
+
+        ResizableHorizontalPanel panel = new ResizableHorizontalPanel();
+        Label text = new Label(sum == null
+                ? messages.formQueriesUnableToCalculateSum() + " [" + property.caption + "]"
+                : messages.formQueriesSumResult() + " [" + property.caption + "]: ");
+        panel.add(text);
+        panel.add(GwtClientUtils.createHorizontalStrut(2));
+
+        if (sum != null) {
+            TextBox valueBox = new TextBox();
+            valueBox.addStyleName("popup-sumBox");
+            valueBox.setHeight(StyleDefaults.VALUE_HEIGHT_STRING);
+            panel.add(valueBox);
+            NumberFormat format = NumberFormat.getDecimalFormat();
+            if(sum instanceof BigDecimal)
+                format.overrideFractionDigits(0, ((BigDecimal)sum).scale());
+            valueBox.setValue(format.format(sum));
+            panel.setCellVerticalAlignment(text, HasAlignment.ALIGN_MIDDLE);
+        }
+
+        GwtClientUtils.showPopupInWindow(popup, new FocusPanel(panel), x, y);
+    }
+
+    public GGroupObjectValue getTableCurrentColumnKey() {
+        return table.getCurrentColumnKey();
     }
 
     public void updateKeys(GGroupObject group, ArrayList<GGroupObjectValue> keys, GFormChanges fc) {

@@ -922,7 +922,7 @@ public class GFormController extends ResizableSimplePanel implements ServerMessa
 
         if(BrowserEvents.CONTEXTMENU.equals(event.getType())) {
             handler.consume();
-            GPropertyContextMenuPopup.show(property, event.getClientX(), event.getClientY(), actionSID -> {
+            GPropertyContextMenuPopup.show(this, property, event.getClientX(), event.getClientY(), actionSID -> {
                 actionDispatcher.executePropertyActionSID(event, actionSID, editContext);
             });
         } else {
@@ -1208,20 +1208,20 @@ public class GFormController extends ResizableSimplePanel implements ServerMessa
             ((TabbedContainerView)formLayout.getContainerView(component.container)).activateTab(component);
     }
 
-    public void countRecords(final GGroupObject groupObject) {
+    public void countRecords(final GGroupObject groupObject, int x, int y) {
         dispatcher.execute(new CountRecords(groupObject.ID), new ErrorHandlingCallback<NumberResult>() {
             @Override
             public void success(NumberResult result) {
-                controllers.get(groupObject).showRecordQuantity((Integer) result.value);
+                controllers.get(groupObject).showRecordQuantity((Integer) result.value, x, y);
             }
         });
     }
 
-    public void calculateSum(final GGroupObject groupObject, final GPropertyDraw propertyDraw, GGroupObjectValue columnKey) {
+    public void calculateSum(final GGroupObject groupObject, final GPropertyDraw propertyDraw, GGroupObjectValue columnKey, int x, int y) {
         dispatcher.execute(new CalculateSum(propertyDraw.ID, columnKey), new ErrorHandlingCallback<NumberResult>() {
             @Override
             public void success(NumberResult result) {
-                controllers.get(groupObject).showSum(result.value, propertyDraw);
+                controllers.get(groupObject).showSum(result.value, propertyDraw, x, y);
             }
         });
     }
