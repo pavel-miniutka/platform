@@ -34,14 +34,13 @@ The platform allows you to create constraints for the values of any data (even c
 
 Client-server communication at the physical level minimizes synchronous round-trip calls (i.e. each user action leads to a single - usually asynchronous - request/response pair). The desktop client also archives and encrypts all transferred data (when necessary). During client-server communication (via TCP/IP for the desktop client or HTTP for the Web client), the platform provides guarantee of delivery - it resends any lost requests and ensures that they are processed in the correct order. All these features help the platform run efficiently even on low-bandwidth, unstable, or high-latency communication channels.
 
-### **Everything as code**
-
-All elements of the system, from events to form design, are written in the lsFusion language and stored in ordinary text files (without any shared repositories with an unknown structure). This allows you to use popular version control systems (Git, Subversion) and project-building tools (Maven in IDEs) when working with projects. In addition, this approach simplifies the support and deployment of the system you develop - you can use an ordinary text editor to view and quickly modify the logic when necessary and also easily identify any element in the system by file name and line number in this file.
-
-
 ### **Three-tier architecture**
 
 The platform executes the imperative part of the system logic (i.e. everything related to data changes) on application servers and the declarative part (i.e. everything related to data calculations) on database servers. This separation simplifies the scaling of the system you develop and strengthens its fault tolerance due to the different nature of workload on these servers (e.g. using swap on an application server is much more dangerous than on a database server).
+
+### **Everything as code**
+
+All elements of the system, from events to form design, are written in the lsFusion language and stored in ordinary text files (without any shared repositories with an unknown structure). This allows you to use popular version control systems (Git, Subversion) and project-building tools (Maven in IDEs) when working with projects. In addition, this approach simplifies the support and deployment of the system you develop - you can use an ordinary text editor to view and quickly modify the logic when necessary and also easily identify any element in the system by file name and line number in this file.
 
 ### **lsFusion programming language**
 
@@ -68,7 +67,6 @@ Intellij IDEA-based IDE with everything developers could ever need: search for u
 ### **Advanced tools for administrators**
 
 The platform provides a complete set of administration tools for systems that are already running: interpreter (executes lsFusion code), process monitor (receives detailed information about processes that are running, e.g. call start time, stack, user, etc.), scheduler (executes periodic or scheduled actions), profiler (measures the performance of all actions executed for all/given users, e.g. builds a graph of calls, sharing time between the application server and the database server, etc.), messenger (for internal notifications/communication with users in the system), and numerous logs (connections, errors, etc.).
-
 
 ## Installation
 ### Windows 
@@ -116,12 +114,48 @@ The platform provides a complete set of administration tools for systems that ar
           source <(curl -s https://download.lsfusion.org/apt/install-lsfusion3)
 
 For more detailed information about installation process please refer to [install section](https://documentation.lsfusion.org/display/LSFUS/Install) of documentation.
- 
-## Demo / try online?
 
-## Code samples?
+## Code examples
+- [Score table](https://documentation.lsfusion.org/display/LSFUS/Score+table)
 
-## Solutions
+  Simple application that allows you to calculate the score table of a hockey tournament. It contains exactly one form, in which the user can enter game scores, based on which the score table is automatically built. 
+  
+  Using this example you can get an idea of how to quickly develop "Excel-style" applications in which form data are editable, and any changes to them will cause all dependent data on the form to be updated incrementally.
+
+- [Materials management](https://documentation.lsfusion.org/display/LSFUS/Materials+management)
+
+  Example of creating a simple stock management business application. In it, the user can manage receipt and shipment operations, and also obtain item balances.
+
+  This example shows a way to create an application for processing documents that have headers and lines. All forms are created in "Dialog style". In this approach, for each class in the system, a form with their list is created, in which only buttons for creating, editing and deleting objects are available for editing. Clicking the corresponding button opens a separate dialog form, with which the user can create a new object or edit an existing one.
+
+- [How-To](https://documentation.lsfusion.org/display/LSFUS/How-to)
+
+  How-to section of documentation contains examples of typical tasks, categorized.
+
+## Try online
+It is possible to run the code snippets in lsfusion programming language [online](https://lsfusion.org/try).
+
+## Online demos
+- [Score table](https://demo.lsfusion.org/hockeystats) 
+  - [docs](https://documentation.lsfusion.org/display/LSFUS/Score+table) 
+  - [github](https://github.com/lsfusion/samples/tree/master/hockeystats) 
+  - username: guest
+  - password: guest 
+
+- [Materials management (MM)](https://demo.lsfusion.org/mm)
+  - [docs](https://documentation.lsfusion.org/display/LSFUS/Materials+management)
+  - [github](https://github.com/lsfusion/samples/tree/master/mm) 
+  - username: guest
+  - password: guest 
+
+- [ERP](https://demo.lsfusion.org/erp)
+  A commercial ERP system with broad functionality, operating in enterprises with more than 500 concurrent users.
+
+  - [github](https://github.com/lsfusion-solutions/erp)
+  - username: guest
+  - password: guest
+
+  This demo version is the [equ-erp-logics](https://github.com/lsfusion/erp/tree/master/erp-equ-logics) module, which includes basic [ERP logic](https://github.com/lsfusion/erp/tree/master/erp-logics) + communication interfaces ([equ-srv](https://github.com/lsfusion/erp/tree/master/equ-srv)) with the hardware server ([equ-clt](https://github.com/lsfusion/erp/tree/master/equ-clt)).
 
 ## Links
 - [Homepage](https://lsfusion.org)
