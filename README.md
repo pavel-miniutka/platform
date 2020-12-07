@@ -9,6 +9,19 @@ lsFusion is a free open-source information systems development platform based on
 
 Incremental computing, function-level, reactive, and event-based programming, the ability to write and iterate over all function values, multiple inheritance and polymorphism, no encapsulation, and lots of other fundamentally new ideas greatly improve the development speed, quality, and performance of created systems compared to traditional approaches.
 
+[comment]: <> (<p align="center">)
+[comment]: <> (<a href="#main-features">Main Features</a> •)
+[comment]: <> (  <a href="#installation">Installation</a> •)
+[comment]: <> (  <a href="#try-online">Try online</a> •)
+[comment]: <> (  <a href="#code-examples">Code examples</a> •)
+[comment]: <> (  <a href="#online-demos">Online demos</a> •)
+[comment]: <> (  <a href="#links">Links</a> •)
+[comment]: <> (  <a href="#feedback">Feedback</a> •)
+[comment]: <> (  <a href="#license">License</a>)
+[comment]: <> (</p>)
+
+[comment]: <> (---)
+
 ## Main features
 - **Single language for data**
 
@@ -67,6 +80,8 @@ Incremental computing, function-level, reactive, and event-based programming, th
 - **Advanced tools for administrators**
 
   The platform provides a complete set of administration tools for systems that are already running: interpreter (executes lsFusion code), process monitor (receives detailed information about processes that are running, e.g. call start time, stack, user, etc.), scheduler (executes periodic or scheduled actions), profiler (measures the performance of all actions executed for all/given users, e.g. builds a graph of calls, sharing time between the application server and the database server, etc.), messenger (for internal notifications/communication with users in the system), and numerous logs (connections, errors, etc.).
+
+For a more complete list see [lsfusion website](https://lsfusion.org/opportunities).
 
 ## Installation
 ### Windows 
@@ -149,6 +164,7 @@ It is possible to run the code snippets in lsfusion programming language [online
   - password: guest 
 
 - [ERP](https://demo.lsfusion.org/erp)
+
   A commercial ERP system with broad functionality, operating in enterprises with more than 500 concurrent users.
 
   - [github](https://github.com/lsfusion-solutions/erp)
